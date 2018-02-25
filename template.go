@@ -3,6 +3,7 @@ package gendoc
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 	"sort"
 	"strings"
 
@@ -67,10 +68,13 @@ func NewTemplate(descs []*protokit.FileDescriptor) *Template {
 			file.Services = append(file.Services, parseService(s))
 		}
 
-		sort.Sort(file.Enums)
-		sort.Sort(file.Extensions)
-		sort.Sort(file.Messages)
-		sort.Sort(file.Services)
+		if os.Getenv("DISABLE_SORT") != "1" {
+			//fmt.Printf("sort disabled\n")
+			sort.Sort(file.Enums)
+			sort.Sort(file.Extensions)
+			sort.Sort(file.Messages)
+			sort.Sort(file.Services)
+		}
 
 		files = append(files, file)
 	}
